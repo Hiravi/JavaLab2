@@ -15,10 +15,10 @@ public class MainFrame extends JFrame {
     private JLabel labelY = new JLabel("Y:");
     private JLabel labelZ = new JLabel("Z:");
     private JLabel labelResult = new JLabel("Результат:");
-    private JTextField fieldX = new JTextField("0", 10);
-    private JTextField fieldY = new JTextField("0", 10);
-    private JTextField fieldZ = new JTextField("0", 10);
-    private JTextField fieldResult = new JTextField("0", 10);
+    private JTextField fieldX = new JTextField("0", 6);
+    private JTextField fieldY = new JTextField("0", 6);
+    private JTextField fieldZ = new JTextField("0", 6);
+    private JTextField fieldResult = new JTextField("0", 18);
     private JButton buttonMC = new JButton("MC");
     private JButton buttonMPlus = new JButton("M+");
     private JButton buttonClear = new JButton("Очистить поля");
@@ -29,6 +29,7 @@ public class MainFrame extends JFrame {
     private Box hboxFormulaType = Box.createHorizontalBox();
     private int formulaID = 1;
     private Double result = 0.0;
+    private Double sum = 0.0;
 
     public MainFrame() {
 
@@ -63,7 +64,24 @@ public class MainFrame extends JFrame {
         hboxVariables.add(Box.createHorizontalStrut(10));
         hboxVariables.add(fieldZ);
         hboxVariables.add(Box.createHorizontalGlue());
-        hboxVariables.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        //hboxVariables.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        // Кнопка МС
+        buttonMC.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sum = 0.0;
+            }
+        });
+
+        // Кнопка M+
+        buttonMPlus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                sum += result;
+                fieldResult.setText(sum.toString());
+            }
+        });
 
         // Контейнер вывода вычислений
         Box hboxResult = Box.createHorizontalBox();
@@ -71,6 +89,10 @@ public class MainFrame extends JFrame {
         hboxResult.add(labelResult);
         hboxResult.add(Box.createHorizontalStrut(10));
         hboxResult.add(fieldResult);
+        hboxResult.add(Box.createHorizontalStrut(10));
+        hboxResult.add(buttonMC);
+        hboxResult.add(Box.createHorizontalStrut(10));
+        hboxResult.add(buttonMPlus);
         hboxResult.add(Box.createHorizontalGlue());
         hboxResult.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
@@ -88,7 +110,7 @@ public class MainFrame extends JFrame {
                     else {
                         result = calculate2(x, y, z);
                     }
-                    labelResult.setText(result.toString());
+                    fieldResult.setText(result.toString());
                 }
                 catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(MainFrame.this, "Ошибка в формате записи " +
